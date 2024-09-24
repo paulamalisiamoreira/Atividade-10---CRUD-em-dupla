@@ -1,12 +1,25 @@
 <?php 
 include 'db.php';
 
+$professores = array();
+$response = $conn->query("SELECT nome_professor, id_professor from professor;");
+while ($row = $response->fetch_assoc()) {
+    $id_professor = array_push($professores, $row);
+}
+
+$aulas = array();
+$response_aulas = $conn->query("SELECT numero_sala, id_aula from aulas;");
+while($row = $response_aulas->fetch_assoc()){
+    $id_aula = array_push($aulas,$row);
+}
+
 if(isset($_POST['create_diario'])){
     $hora_aula = $_POST['hora_aula'];
     $turma = $_POST['turma'];
+    // $id_professor = $_POST['id_professor'];
 
 
-    $sql = "INSERT INTO diario (hora_aula, turma ) values ('$hora_aula', '$turma');";
+    $sql = "INSERT INTO diario (hora_aula, turma, id_professor, id_aula ) values ('$hora_aula', '$turma', ' $id_professor', '$id_aula');";
 
     if ($conn->query($sql) === TRUE){
         echo "Novo registro realizado com sucesso!";
@@ -33,6 +46,18 @@ $conn-> close();
     <form method="POST" name="adicionar_diario">
      Hora aula: <input type="time" name="hora_aula" required> <br><br>
      Turma: <input type="text" name="turma" required > <br><br>
+     Selecione o professor: 
+        <select name="professor" id="id_professor">
+            <?php foreach ($professores as $professor): ?>
+                <option value="<?= $professor["id_professor"] ?>"> <?= $professor["nome_professor"] ?></option><br><br>
+            <?php endforeach ?>
+        </select>
+     Selecione a Sala de Aula (Aula):
+        <select name="aulas" id="id_aula">
+            <?php foreach ($aulas as $aula):?>
+                <option value="<?= $aula["id_aula"]?>"> <?= $aula["numero_sala"]?></option><br><br>
+            <?php endforeach?>
+        </select>
      <input type="SUBMIT" name="create_diario" value="Adicionar Diario">
     </form>
 </body>

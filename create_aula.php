@@ -1,18 +1,21 @@
-<?include 'db.php'; 
+<?php 
 
-if($_SERVER['REQUEST_METHOD'] == 'POST'){
-    $numero_sala = $_POST['sala'];
-    $tipo_sala = $_POST['tipo_sala'];
+include 'db.php'; 
+
+if(isset($_POST['create_aula'])){
+        $numero_sala = $_POST['numero_sala'];
+        $tipo_sala = $_POST['tipo_sala'];
+
+
+$sql = "INSERT INTO aulas (numero_sala, tipo_sala) values ('$numero_sala', '$tipo_sala');";
+
+    if ($conn->query($sql) == TRUE){
+        echo "Novo registro realizado com sucesso!";
+    } else{
+        echo "Registro não realizado!";
+    }
+
 }
-
-$sql = "INSERT INTO aulas (numero_sala, tipo_sala) values ($numero_sala, $tipo_sala);";
-
-if ($conn->query($sql) == TRUE){
-    echo "Novo registro realizado com sucesso!";
-} else{
-    echo "Registro não realizado!";
-}
-
 $conn-> close();
 
 ?>
@@ -30,9 +33,9 @@ $conn-> close();
     <!-- Adicionar Aula -->
     <h2>Adicionar Aula</h2>
     <form method="POST" name="adicionar_aula">
-     Numero da Sala: <input type="number" name="sala" required> <br><br>
+     Numero da Sala: <input type="number" name="numero_sala" required> <br><br>
      Tipo da Sala: <input type="text" name="tipo_sala" required> <br><br>
-     <input type="SUBMIT">
+     <input type="SUBMIT" name="create_aula" value="Adicionar Aula">
     </form>
 
 </body>
